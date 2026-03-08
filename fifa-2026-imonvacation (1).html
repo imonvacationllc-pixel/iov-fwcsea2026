@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImOnVacation FIFA 2026 - Soccer Moves Interactive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --fifa-navy: #003f87;
+            --fifa-teal: #5EBCC1;
+            --fifa-gold: #FFB612;
+            --fifa-white: #ffffff;
+            --fifa-dark: #001f43;
+            --accent-gray: #f0f4f8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--fifa-teal) 0%, var(--fifa-navy) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .logo-header {
+            background: linear-gradient(135deg, var(--fifa-teal) 0%, var(--fifa-navy) 100%);
+            padding: 30px 25px;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 8px 24px rgba(94, 188, 193, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 182, 18, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .logo-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255, 182, 18, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-item {
+            text-align: center;
+        }
+
+        .logo-item img {
+            width: 150px;
+            height: auto;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .logo-item img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-label {
+            color: var(--fifa-gold);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        .header {
+            text-align: center;
+            color: var(--fifa-white);
+            margin-bottom: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 8px 24px rgba(94, 188, 193, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: var(--fifa-navy);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .header p {
+            font-size: 15px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .qr-note {
+            font-size: 12px;
+            color: var(--fifa-gold);
+            font-weight: 600;
+            margin-top: 12px;
+            padding: 8px 0;
+            border-top: 2px solid var(--fifa-gold);
+            border-bottom: 2px solid var(--fifa-gold);
+        }
+
+        .move-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .move-btn {
+            background: var(--fifa-white);
+            border: 2px solid var(--fifa-navy);
+            border-radius: 8px;
+            padding: 12px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: var(--fifa-navy);
+        }
+
+        .move-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(94, 188, 193, 0.25);
+            border-color: var(--fifa-gold);
+            color: var(--fifa-gold);
+        }
+
+        .move-btn.active {
+            background: linear-gradient(135deg, var(--fifa-navy) 0%, var(--fifa-teal) 100%);
+            color: var(--fifa-gold);
+            border-color: var(--fifa-gold);
+            box-shadow: 0 6px 16px rgba(255, 182, 18, 0.3);
+        }
+
+        .move-content {
+            background: var(--fifa-white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(94, 188, 193, 0.15);
+            margin-bottom: 20px;
+            display: none;
+            border-top: 5px solid var(--fifa-gold);
+        }
+
+        .move-content.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .move-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--fifa-navy);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--accent-gray);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+        }
+
+        .difficulty.easy { 
+            background: #d4edda; 
+            color: #155724;
+            border-color: #155724;
+        }
+
+        .difficulty.medium { 
+            background: #fff3cd; 
+            color: #856404;
+            border-color: #856404;
+        }
+
+        .difficulty.hard { 
+            background: #f8d7da; 
+            color: #721c24;
+            border-color: #721c24;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--fifa-navy);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            background: var(--fifa-gold);
+            border-radius: 2px;
+        }
+
+        .section-content {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--fifa-navy) 0%, var(--fifa-teal) 100%);
+            border-left: 4px solid var(--fifa-gold);
+            border-radius: 4px;
+            font-size: 14px;
+            color: white;
+        }
+
+        .step-list li strong {
+            color: var(--fifa-gold);
+        }
+
+        .animation-area {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            padding: 40px 20px;
+            margin: 20px 0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player {
+            width: 40px;
+            height: 60px;
+            background: var(--fifa-navy);
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .player-leg {
+            width: 8px;
+            height: 30px;
+            background: #333;
+            position: absolute;
+            bottom: 0;
+            transform-origin: top center;
+        }
+
+        .ball {
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 30% 30%, #fff, #000);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .defender {
+            width: 40px;
+            height: 60px;
+            background: var(--fifa-gold);
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+        }
+
+        .famous-players {
+            background: var(--accent-gray);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid var(--fifa-gold);
+        }
+
+        .famous-players strong {
+            color: var(--fifa-navy);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .famous-players p {
+            font-size: 13px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .tips {
+            background: linear-gradient(135deg, #e7f3ff 0%, #f0e7ff 100%);
+            border-left: 4px solid var(--fifa-gold);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .tips strong {
+            color: var(--fifa-navy);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--fifa-white);
+            margin-top: 30px;
+            font-size: 12px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .cta-section {
+            background: var(--fifa-white);
+            color: var(--fifa-navy);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(94, 188, 193, 0.2);
+            border-top: 5px solid var(--fifa-gold);
+        }
+
+        .cta-section h3 {
+            color: var(--fifa-navy);
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .cta-section p {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .travel-button {
+            background: linear-gradient(135deg, var(--fifa-navy) 0%, var(--fifa-teal) 100%);
+            color: var(--fifa-gold);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+            font-family: Arial, sans-serif;
+            transition: all 0.3s ease;
+            border: 2px solid var(--fifa-gold);
+        }
+
+        .travel-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 182, 18, 0.4);
+            background: var(--fifa-gold);
+            color: var(--fifa-navy);
+        }
+
+        .disclaimer-section {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+            font-size: 12px;
+            line-height: 1.6;
+            border-left: 5px solid var(--fifa-gold);
+        }
+
+        .disclaimer-section h4 {
+            color: var(--fifa-navy);
+            font-size: 14px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--fifa-gold);
+            padding-bottom: 8px;
+        }
+
+        .disclaimer-section p {
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .watch-party-cta {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(94, 188, 193, 0.15);
+            border-top: 5px solid var(--fifa-gold);
+        }
+
+        .watch-party-cta h3 {
+            color: var(--fifa-navy);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .watch-party-cta p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--fifa-navy) 0%, var(--fifa-teal) 100%);
+            color: var(--fifa-gold);
+            border: 2px solid var(--fifa-gold);
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            background: var(--fifa-gold);
+            color: var(--fifa-navy);
+            box-shadow: 0 4px 12px rgba(255, 182, 18, 0.4);
+        }
+
+        .video-link {
+            background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            border-left: 4px solid var(--fifa-gold);
+            border-top: 2px solid var(--fifa-gold);
+        }
+
+        .video-link p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .video-link a {
+            color: var(--fifa-navy);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .video-link a:hover {
+            text-decoration: underline;
+            color: var(--fifa-gold);
+        }
+
+        .tab-indicator {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .move-description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+            font-style: italic;
+            padding: 12px;
+            background: var(--accent-gray);
+            border-left: 4px solid var(--fifa-navy);
+            border-radius: 4px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .move-title {
+                font-size: 22px;
+            }
+
+            .move-selector {
+                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            }
+
+            .move-btn {
+                font-size: 11px;
+                padding: 10px 6px;
+            }
+
+            .animation-area {
+                min-height: 150px;
+            }
+
+            .logo-container {
+                gap: 20px;
+            }
+
+            .logo-item img {
+                width: 120px;
+            }
+        }
+
+        .emoji {
+            font-size: 24px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(94, 188, 193, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: var(--fifa-navy);
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: var(--fifa-gold);
+            color: var(--fifa-navy);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .close-modal:hover {
+            background: var(--fifa-navy);
+            color: var(--fifa-gold);
+            transform: rotate(90deg);
+        }
+
+        .watch-party-item {
+            background: linear-gradient(135deg, #f0f8ff 0%, #fff9e6 100%);
+            border: 2px solid var(--fifa-navy);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .watch-party-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(255, 182, 18, 0.3);
+            border-color: var(--fifa-gold);
+        }
+
+        .party-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--fifa-navy);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .party-info {
+            font-size: 13px;
+            color: #555;
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .party-info strong {
+            color: var(--fifa-navy);
+            min-width: 80px;
+        }
+
+        .register-btn {
+            background: linear-gradient(135deg, var(--fifa-navy) 0%, var(--fifa-teal) 100%);
+            color: var(--fifa-gold);
+            border: 2px solid var(--fifa-gold);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .register-btn:hover {
+            background: var(--fifa-gold);
+            color: var(--fifa-navy);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-header">
+            <div class="logo-container">
+                <div class="logo-item">
+                    <img src="imonvacation-logo.jpg" alt="ImOnVacation Logo">
+                    <div class="logo-label">ImOnVacation®</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="header">
+            <h1>⚽ FIFA 2026 Soccer Moves</h1>
+            <p>Learn the techniques from the world's best players</p>
+            <p class="qr-note">🎯 Scan this QR code from your ImOnVacation shirt!</p>
+        </div>
+
+        <div class="watch-party-cta">
+            <h3>🎉 Watch These Moves Live</h3>
+            <p>Join us at our FIFA 2026 Watch Parties in Seattle</p>
+            <button class="cta-button" onclick="openWatchParties()">Find Watch Parties</button>
+        </div>
+
+        <!-- Watch Parties Modal -->
+        <div id="watchPartiesModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>⚽ 10 FIFA 2026 Watch Parties - Seattle/Tacoma/Bellevue Area</h2>
+                    <button class="close-modal" onclick="closeWatchParties()">&times;</button>
+                </div>
+                <div id="watchPartiesContent"></div>
+            </div>
+        </div>
+
+        <div class="move-selector" id="moveSelector"></div>
+
+        <!-- Move Contents -->
+        <div id="moveContent"></div>
+
+        <div class="footer">
+            <p><strong>ImOnVacation</strong> - FIFA 2026 Watch Parties & Curated Travel Experiences</p>
+            <p>Bringing the world's game to Seattle and beyond</p>
+            
+            <div class="cta-section">
+                <h3>Ready to Goal? ⚽</h3>
+                <p>Planning your World Cup adventure in Seattle shouldn't be work. ImOnVacation is here to make your trip a winner.</p>
+                <a href="https://linkpages.pro/zQ8lpj" class="travel-button">ImOnVacation Travel</a>
+            </div>
+
+            <div class="disclaimer-section">
+                <h4>Disclaimer of Liability</h4>
+                <p><strong>Accuracy of Information:</strong> The information regarding 2026 FIFA World Cup™ watch parties and venues provided on this website is for general informational purposes only. While we strive to keep the information up-to-date and correct, ImOnVacation LLC makes no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, or availability of the venues, addresses, or policies (such as age restrictions or pet friendliness) listed.</p>
+                
+                <p><strong>Third-Party Venues:</strong> All venues listed are independent businesses. ImOnVacation LLC is not affiliated with, endorsed by, or responsible for the operations, safety, or entry requirements of these third-party establishments. Venue policies, including "all ages" status and operating hours, are subject to change without notice at the discretion of the venue management.</p>
+                
+                <p><strong>Limitation of Liability:</strong> In no event will ImOnVacation LLC be liable for any loss, damage, or inconvenience—including but not limited to travel costs or denied entry—arising from the use of this information. Users are strongly encouraged to contact the venue directly to confirm match-day details before traveling.</p>
+
+                <h4>Business Information</h4>
+                <p>ImOnVacation® is a lifestyle brand inspiring you to embrace every journey and explore the world's wonders through innovative, educational, and expressive products and inclusive services for all experiences.<br>
+                <br>
+                © 2026 All Rights Reserved</p>
+                <div style="text-align: center; margin-top: 20px;">
+                    <img src="owmbe-logo.jpg" alt="Washington State MWBE Certified" style="max-width: 250px; height: auto;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const moves = [
+            {
+                id: 'bicycle-kick',
+                name: 'Bicycle Kick',
+                emoji: '🚴‍♂️',
+                difficulty: 'hard',
+                description: 'A dramatic overhead kick performed while airborne with your back to the goal. Also known as a scissor kick.',
+                howIt: [
+                    '<strong>Position:</strong> Position yourself with the ball approaching from behind',
+                    '<strong>Jump:</strong> Jump backward, arching your back',
+                    '<strong>Swing:</strong> Swing one leg upward in a powerful arc',
+                    '<strong>Connect:</strong> Strike the ball while your body is horizontal',
+                    '<strong>Follow Through:</strong> Fall safely to the ground after contact'
+                ],
+                when: 'When the ball is floating at mid-height and you\'re in a attacking position with your back to goal.',
+                why: 'Creates a goal-scoring opportunity from difficult positions. Unexpected trajectory makes it hard to defend.',
+                famous: 'Cristiano Ronaldo, Marco Di Vaio, various strikers who specialize in aerial play',
+                tips: 'Requires athleticism, timing, and confidence. Practice in a safe environment first.'
+            },
+            {
+                id: 'nutmeg',
+                name: 'Nutmeg',
+                emoji: '🎯',
+                difficulty: 'medium',
+                description: 'Pass or dribble the ball directly through an opponent\'s legs while evading them. Also called "megging."',
+                howIt: [
+                    '<strong>Approach:</strong> Dribble toward the defender with close ball control',
+                    '<strong>Tap:</strong> Gently tap or push the ball forward',
+                    '<strong>Thread:</strong> The ball travels between the defender\'s legs',
+                    '<strong>Sprint:</strong> Run around the defender to collect the ball',
+                    '<strong>Continue:</strong> Maintain your attack or create a passing opportunity'
+                ],
+                when: 'One-on-one situations in midfield or attacking areas where you have space to run.',
+                why: 'Quickly gets past a defender with one touch. Embarrasses the defender and creates space.',
+                famous: 'Neymar (famous for nutmegs), Messi, Ronaldinho, young players proving themselves',
+                tips: 'Requires confidence and close ball control. Risk: if unsuccessful, the ball goes to opponent.'
+            },
+            {
+                id: 'elastico',
+                name: 'Elastico (Rainbow Flick)',
+                emoji: '🌈',
+                difficulty: 'hard',
+                description: 'Flick the ball up and over an opponent\'s head using the outside of your boot in one motion.',
+                howIt: [
+                    '<strong>Position:</strong> Position ball on the inside of your foot',
+                    '<strong>Quick Flick:</strong> Use the outside of your boot to scoop the ball upward',
+                    '<strong>Arc:</strong> The ball curves up and over the defender\'s head',
+                    '<strong>Sprint:</strong> Run past the defender to retrieve the ball',
+                    '<strong>Timing:</strong> The entire move happens in less than a second'
+                ],
+                when: 'When a defender is directly in front blocking your path in attacking areas.',
+                why: 'Gets the ball over a defender\'s head instantly. Creates dramatic moments that excite fans.',
+                famous: 'Ronaldinho (popularized this), Neymar (frequent user), occasional Messi',
+                tips: 'Requires precise timing and lots of practice. Risk: ball can go out of play if not executed perfectly.'
+            },
+            {
+                id: 'through-pass',
+                name: 'Through Pass',
+                emoji: '➡️',
+                difficulty: 'medium',
+                description: 'Send the ball forward through the opposition\'s defense, creating space for a teammate to run into.',
+                howIt: [
+                    '<strong>Identify:</strong> Spot a gap in the defending line',
+                    '<strong>Anticipate:</strong> Know your teammate will make a forward run',
+                    '<strong>Strike:</strong> Pass the ball with correct pace and angle through the gap',
+                    '<strong>Timing:</strong> The ball reaches your teammate\'s feet ahead of defenders',
+                    '<strong>Result:</strong> Teammate is now one-on-one with goalkeeper'
+                ],
+                when: 'When defenders are in a line with a gap and an attacker makes a forward run.',
+                why: 'Breaks down defensive formations instantly. Creates clear goal-scoring opportunities.',
+                famous: 'Zinedine Zidane (master), Mesut Özil, Toni Kroos, modern creative midfielders',
+                tips: 'Requires game awareness and passing accuracy. Key skill: understanding teammates\' runs.'
+            },
+            {
+                id: 'chip-shot',
+                name: 'Chip Shot',
+                emoji: '💫',
+                difficulty: 'hard',
+                description: 'Gently loft the ball over the goalkeeper\'s head using a scooping motion from just outside the penalty area.',
+                howIt: [
+                    '<strong>Position:</strong> Position yourself with goalkeeper rushing toward you',
+                    '<strong>Scoop:</strong> Instead of striking hard, use a short delicate contact under the ball',
+                    '<strong>Lift:</strong> The ball floats upward in an arc',
+                    '<strong>Clearance:</strong> The ball sails over the goalkeeper\'s head',
+                    '<strong>Result:</strong> Ball drops into the goal'
+                ],
+                when: 'When the goalkeeper comes out to meet you or there\'s not much space to shoot.',
+                why: 'Creates a spectacular finish when goalkeeper is positioned high. Low-risk tactical option.',
+                famous: 'Pelé, Sergio Aguero, various strikers with good technique',
+                tips: 'Requires nerve and precision. Risk: can go over the bar or straight to goalkeeper if mistimed.'
+            },
+            {
+                id: 'cruyff-turn',
+                name: 'Cruyff Turn',
+                emoji: '↩️',
+                difficulty: 'hard',
+                description: 'Drag the ball behind your body while changing direction 90 degrees. Named after Johan Cruyff.',
+                howIt: [
+                    '<strong>Plant:</strong> Plant your supporting foot firmly',
+                    '<strong>Drag:</strong> With the inside of your other foot, drag the ball backward',
+                    '<strong>Turn:</strong> Your body follows through with a sharp 90-degree turn',
+                    '<strong>Accelerate:</strong> Sprint away in the new direction',
+                    '<strong>Result:</strong> Defender is left behind unable to recover'
+                ],
+                when: 'When a defender is running alongside you and you need to quickly change direction.',
+                why: 'Loses a defender in an instant. Changes direction more sharply than normal turns.',
+                famous: 'Johan Cruyff (inventor), Messi (frequently uses), Iniesta (elegant execution)',
+                tips: 'Requires sharp deceleration and excellent ball control. Can be done at high speed.'
+            },
+            {
+                id: 'rabona',
+                name: 'Rabona',
+                emoji: '🔀',
+                difficulty: 'hard',
+                description: 'Wrap your non-dominant leg around your dominant leg to strike the ball in an unexpected direction.',
+                howIt: [
+                    '<strong>Position:</strong> Position yourself to cross or shoot',
+                    '<strong>Wrap:</strong> Wrap your non-dominant leg around behind your body',
+                    '<strong>Strike:</strong> Use your dominant foot on the far side to strike the ball',
+                    '<strong>Curve:</strong> The ball travels with unusual curve and spin',
+                    '<strong>Result:</strong> Difficult-to-predict trajectory toward goal or across'
+                ],
+                when: 'From the sideline when crossing, or attempting a curved shot from a wide angle.',
+                why: 'Allows kicking in unexpected direction. Confuses defenders and goalkeepers. Looks spectacular.',
+                famous: 'Cristiano Ronaldo (famous for rabona crosses), Gareth Bale (occasional user)',
+                tips: 'Very high difficulty. Requires coordination and practice. Risk: often goes out of play if not executed perfectly.'
+            },
+            {
+                id: 'slide-tackle',
+                name: 'Slide Tackle',
+                emoji: '🛡️',
+                difficulty: 'medium',
+                description: 'Slide toward the ball and an opponent to block or dispossess them, falling to the ground.',
+                howIt: [
+                    '<strong>Judge:</strong> Assess distance and positioning of attacker',
+                    '<strong>Plant:</strong> Plant your supporting leg and begin sliding',
+                    '<strong>Extend:</strong> Extend your sliding leg to block the ball',
+                    '<strong>Contact:</strong> Make contact with ball or force attacker to slow down',
+                    '<strong>Result:</strong> Clean tackle or yellow/red card if late'
+                ],
+                when: 'When an attacker is running toward goal and you\'re out of position defensively.',
+                why: 'Last-ditch effort to stop attacking opportunity. Can dispossess high-speed attackers.',
+                famous: 'Sergio Ramos, John Terry, various excellent defenders, all fullbacks do these',
+                tips: 'Requires timing and positioning. Mistimed slides result in fouls and yellow/red cards.'
+            },
+            {
+                id: 'volley-shot',
+                name: 'Volley Shot',
+                emoji: '⚡',
+                difficulty: 'hard',
+                description: 'Strike the ball powerfully while it\'s in mid-air, not bouncing off the ground.',
+                howIt: [
+                    '<strong>Observe:</strong> Watch ball coming through the air (from cross or clearance)',
+                    '<strong>Position:</strong> Position yourself with ball at chest height or higher',
+                    '<strong>Plant:</strong> Plant supporting leg firmly',
+                    '<strong>Swing:</strong> Swing striking leg upward and forward',
+                    '<strong>Strike:</strong> Strike ball while in mid-air with power'
+                ],
+                when: 'From crosses coming from the wing or when ball comes directly to you in mid-air.',
+                why: 'Creates powerful shot from difficult position. Harder to control, creating unpredictability.',
+                famous: 'Various strikers and attacking midfielders, defenders on clearances',
+                tips: 'Requires timing and technique. Can easily go wide or over bar if not connected properly.'
+            },
+            {
+                id: 'fake-shot',
+                name: 'Fake Shot / Directional Change',
+                emoji: '🎭',
+                difficulty: 'medium',
+                description: 'Appear to shoot or pass but instead change direction suddenly, leaving defenders flat-footed.',
+                howIt: [
+                    '<strong>Setup:</strong> Run with ball toward defenders',
+                    '<strong>Body Position:</strong> Position body as if to shoot or pass one direction',
+                    '<strong>Deceive:</strong> Use body language and upper body to suggest one direction',
+                    '<strong>Tap:</strong> Tap ball to the side with outside of foot',
+                    '<strong>Result:</strong> Defenders expect ball one way, you go another'
+                ],
+                when: 'In congested areas when surrounded by defenders or in midfield tight spaces.',
+                why: 'Creates space instantly in tight situations. Confuses defensive positioning.',
+                famous: 'Messi (expert), modern attackers with good ball control, playmakers',
+                tips: 'Requires game awareness and ball control. Low-risk way to change direction.'
+            }
+        ];
+
+        const watchParties = [
+            {
+                name: 'Rough & Tumble Pub (Women-Owned)',
+                location: 'Ballard, Seattle',
+                time: 'Saturdays & Wednesdays - 3:00 PM',
+                address: '5309 22nd Ave NW, Seattle, WA 98107',
+                phone: '(206) 737-7687',
+                capacity: '50-100 people',
+                price: 'Kids menu available, pet-friendly patio',
+                business: 'Casual sports pub',
+                friendly: 'Kid-Friendly & Pet-Friendly',
+                transit: 'Link to Westlake Station, then RapidRide D Line to Ballard',
+                link: 'https://www.roughandtumblepub.com'
+            },
+            {
+                name: 'Rookies Sports Bar & Grill',
+                location: 'Columbia City, Seattle',
+                time: 'Sundays - 2:00 PM',
+                address: '3820 S Ferdinand St, Seattle, WA 98118',
+                phone: '(206) 722-0301',
+                capacity: '40-80 people',
+                price: 'Family seating available',
+                business: 'Sports bar & grill',
+                friendly: 'Kid-Friendly',
+                transit: 'Short walk from Columbia City Station',
+                link: 'https://www.rookiesseattle.com'
+            },
+            {
+                name: 'The Dock Sports Bar & Grill',
+                location: 'Fremont, Seattle',
+                time: 'Friday Nights - 7:00 PM',
+                address: '1102 N 34th St, Seattle, WA 98103',
+                phone: '(206) 632-3400',
+                capacity: '75-150 people',
+                price: 'Large outdoor deck available',
+                business: 'Sports bar with outdoor space',
+                friendly: 'Kid-Friendly & Pet-Friendly',
+                transit: 'Link to U District Station, then bus/rideshare to Fremont',
+                link: 'https://www.fremontdock.com'
+            },
+            {
+                name: 'Machine House Brewery',
+                location: 'Hillman City, Seattle',
+                time: 'Weekdays - 6:00 PM',
+                address: '5840 Airport Way S #121, Seattle, WA 98108',
+                phone: '(206) 402-6025',
+                capacity: '40-80 people',
+                price: 'Local craft beers',
+                business: 'Craft brewery',
+                friendly: 'Kid-Friendly & Pet-Friendly',
+                transit: 'Link to Columbia City Station + ~15-minute walk',
+                link: 'https://www.machinehousebrewery.com'
+            },
+            {
+                name: 'Seattle Center Armory (Primary Fan Zone)',
+                location: 'Lower Queen Anne, Seattle',
+                time: 'Saturdays - 4:00 PM',
+                address: '305 Harrison St, Seattle, WA 98109',
+                phone: '(206) 684-7200',
+                capacity: '200+ people',
+                price: 'Community gathering space',
+                business: 'Event venue & community hub',
+                friendly: 'Kid-Friendly (All Ages)',
+                transit: 'Link to Westlake Station, then Seattle Monorail to Center',
+                link: 'https://www.seattlecenter.com'
+            },
+            {
+                name: 'Victory Hall (Primary Fan Zone)',
+                location: 'SODO, Seattle',
+                time: 'Saturdays - 2:00 PM',
+                address: '1201 1st Ave S, Seattle, WA 98134',
+                phone: '(206) 346-4000',
+                capacity: '150-250 people',
+                price: 'Outdoor area available',
+                business: 'Event venue',
+                friendly: 'Kid-Friendly & Pet-Friendly',
+                transit: 'Directly served by Stadium Station',
+                link: 'https://www.victoryhallsea.com'
+            },
+            {
+                name: 'Metier Brewing Company (Black-Owned)',
+                location: 'Central District, Seattle',
+                time: 'Fridays - 6:00 PM',
+                address: '2616 E Cherry St, Seattle, WA 98122',
+                phone: '(206) 556-2059',
+                capacity: '60-100 people',
+                price: 'Craft beers & community space',
+                business: 'Black-owned craft brewery',
+                friendly: 'Kid-Friendly & Pet-Friendly',
+                transit: 'Link to Capitol Hill Station + 20-min walk or Bus Route 2/48',
+                link: 'https://www.metierbrewing.com'
+            },
+            {
+                name: 'Boon Boona Coffee (Black-Owned/Community Hub)',
+                location: 'Downtown Renton',
+                time: 'Sundays - 3:00 PM',
+                address: '724 S 3rd St, Renton, WA 98057',
+                phone: '(425) 496-8618',
+                capacity: '30-60 people',
+                price: 'Coffee & community space',
+                business: 'Black-owned community hub',
+                friendly: 'Kid-Friendly',
+                transit: 'Sounder Train (S Line) to Tukwila/Renton or regional bus',
+                link: 'https://www.boonboonacoffee.com'
+            },
+            {
+                name: 'Seattle Soccer House (Pacific Place Fan Zone)',
+                location: 'Downtown Seattle',
+                time: 'Saturdays - 1:00 PM',
+                address: '600 Pine St, Seattle, WA 98101',
+                phone: '(206) 405-2400',
+                capacity: '100-200 people',
+                price: 'Shopping center venue',
+                business: 'Fan zone',
+                friendly: 'Kid-Friendly',
+                transit: 'Directly adjacent to Westlake Station',
+                link: 'https://www.pacificplaceseattle.com'
+            },
+            {
+                name: 'The Berliner Pub',
+                location: 'Downtown Renton',
+                time: 'Fridays - 5:00 PM',
+                address: '221 Main Ave S, Renton, WA 98057',
+                phone: '(425) 277-1111',
+                capacity: '50-100 people',
+                price: 'Full menu & bar',
+                business: 'German pub & restaurant',
+                friendly: 'Kid-Friendly (daytime matches)',
+                transit: 'Sounder Train (S Line) or regional bus routes',
+                link: 'https://www.berlinerpub.com'
+            },
+            {
+                name: 'The George & Dragon Pub (Official Partner)',
+                location: 'Fremont, Seattle',
+                time: 'Saturdays & Sundays - 1:00 PM',
+                address: '206 N 36th St, Seattle, WA 98103',
+                phone: '(206) 695-2768',
+                capacity: '60-100 people',
+                price: 'Pet-friendly patio',
+                business: 'British-style pub',
+                friendly: 'Pet-Friendly (21+ for big matches)',
+                transit: 'Link to U District Station + Bus Route 31/32',
+                link: 'https://www.theegeorge.com'
+            },
+            {
+                name: 'Doyle\'s Public House (Official Partner)',
+                location: 'North End, Tacoma',
+                time: 'Saturdays & Sundays - 2:00 PM',
+                address: '208 St Helens Ave, Tacoma, WA 98402',
+                phone: '(253) 272-7468',
+                capacity: '50-100 people',
+                price: 'Traditional Irish pub',
+                business: 'Irish pub',
+                friendly: '21+ Only',
+                transit: 'Short walk from Stadium District Station (Tacoma T Line)',
+                link: 'https://www.doylespublichouse.com'
+            },
+            {
+                name: 'The Atlantic Crossing (Official Partner)',
+                location: 'Roosevelt, Seattle',
+                time: 'Thursdays & Sundays - 5:00 PM',
+                address: '7200 Woodlawn Ave NE, Seattle, WA 98115',
+                phone: '(206) 729-6266',
+                capacity: '35-70 people',
+                price: 'Pet-friendly outdoor seating',
+                business: 'Neighborhood bar',
+                friendly: 'Kid-Friendly (until 8 PM) & Pet-Friendly',
+                transit: 'Blocks from Roosevelt Station',
+                link: 'https://www.theatlanticcrossing.com'
+            },
+            {
+                name: 'The Three Lions Pub',
+                location: 'Downtown Redmond',
+                time: 'Saturdays - 2:00 PM',
+                address: '8115 161st Ave NE, Redmond, WA 98052',
+                phone: '(425) 284-3399',
+                capacity: '45-90 people',
+                price: 'British-style pub',
+                business: 'Pub',
+                friendly: 'Kid-Friendly',
+                transit: 'Accessible via 2 Line (East Link) to Redmond',
+                link: 'https://www.thethreelionspubwa.com'
+            }
+        ];
+
+        function openWatchParties() {
+            document.getElementById('watchPartiesModal').style.display = 'block';
+            let html = '';
+            watchParties.forEach(party => {
+                html += `
+                    <div class="watch-party-item">
+                        <div class="party-name">📍 ${party.name}</div>
+                        <div class="party-info"><strong>🏪 Type:</strong> ${party.business}</div>
+                        <div class="party-info"><strong>👥 Vibe:</strong> ${party.friendly}</div>
+                        <div class="party-info"><strong>📅 When:</strong> ${party.time}</div>
+                        <div class="party-info"><strong>📍 Where:</strong> ${party.address}</div>
+                        <div class="party-info"><strong>🚇 Transit:</strong> ${party.transit}</div>
+                        <div class="party-info"><strong>👥 Capacity:</strong> ${party.capacity}</div>
+                        <div class="party-info"><strong>✨ Details:</strong> ${party.price}</div>
+                        <div class="party-info"><strong>☎️ Contact:</strong> ${party.phone}</div>
+                        <button class="register-btn" onclick="window.open('${party.link}', '_blank')">Website →</button>
+                    </div>
+                `;
+            });
+            document.getElementById('watchPartiesContent').innerHTML = html;
+        }
+
+        function closeWatchParties() {
+            document.getElementById('watchPartiesModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('watchPartiesModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function createMoveContent(move) {
+            return `
+                <div class="move-content active" id="move-${move.id}">
+                    <div class="move-title">
+                        <span class="tab-indicator">${move.emoji}</span>
+                        ${move.name}
+                    </div>
+                    
+                    <div class="difficulty ${move.difficulty}">
+                        Difficulty: ${move.difficulty.toUpperCase()}
+                    </div>
+
+                    <p class="move-description">${move.description}</p>
+
+                    <div class="section">
+                        <div class="section-title">📖 How It Works</div>
+                        <ul class="step-list">
+                            ${move.howIt.map(step => `<li>${step}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">⏰ When It Happens</div>
+                        <p class="section-content">${move.when}</p>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">❓ Why Players Use It</div>
+                        <p class="section-content">${move.why}</p>
+                    </div>
+
+                    <div class="famous-players">
+                        <strong>⭐ Famous Players Who Execute This:</strong>
+                        <p>${move.famous}</p>
+                    </div>
+
+                    <div class="tips">
+                        <strong>💡 Pro Tip:</strong> ${move.tips}
+                    </div>
+
+                    <div class="video-link">
+                        <p>Want to see this move in action?</p>
+                        <p><strong>Search YouTube:</strong> "${move.name} football/soccer tutorial"</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Or watch for this move during FIFA 2026 matches at our watch parties!</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializePage() {
+            // Create move selector buttons
+            const selectorHtml = moves.map((move, index) => `
+                <button class="move-btn ${index === 0 ? 'active' : ''}" onclick="selectMove('${move.id}')">
+                    <span class="emoji">${move.emoji}</span>
+                    <div>${move.name}</div>
+                </button>
+            `).join('');
+
+            document.getElementById('moveSelector').innerHTML = selectorHtml;
+
+            // Create move content
+            let contentHtml = '';
+            moves.forEach((move, index) => {
+                contentHtml += createMoveContent(move);
+            });
+
+            document.getElementById('moveContent').innerHTML = contentHtml;
+
+            // Hide all except first
+            document.querySelectorAll('.move-content').forEach((el, index) => {
+                if (index !== 0) el.classList.remove('active');
+            });
+        }
+
+        function selectMove(moveId) {
+            // Hide all content
+            document.querySelectorAll('.move-content').forEach(el => el.classList.remove('active'));
+            
+            // Show selected
+            document.getElementById(`move-${moveId}`).classList.add('active');
+
+            // Update buttons
+            document.querySelectorAll('.move-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.move-btn').classList.add('active');
+
+            // Scroll to top
+            document.querySelector('.move-selector').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>
